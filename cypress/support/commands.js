@@ -22,6 +22,24 @@ Cypress.Commands.add("loadLoginPage", () => {
   cy.url().should("include", "/auth/login");
 });
 
+Cypress.Commands.add("loginUser", (email, password) => {
+  cy.get('[name="email"]').type(email);
+  cy.get('[name="password"]').type(password);
+  cy.get('[name="email"]').should("have.value", email);
+  cy.get('[name="password"]').should("have.value", password);
+  cy.intercept("POST", "/user/login").as("login");
+  cy.get('[type="submit"]').click();
+  cy.wait("@login").its("response.statusCode").should("eq", 200);
+  cy.location("pathname").should("eq", "/auth/profile");
+  cy.get("header li svg circle").eq(1).as("icon-user");
+  cy.get("@icon-user").should("have.attr", "fill");
+});
+
+Cypress.Commands.add("clearInputCheck", (selector, id, data) => {
+  cy.get(selector).eq(id).clear().type(data);
+  cy.get(selector).eq(id).should("have.value", data.trim());
+});
+
 Cypress.Commands.add("login", (email, password) => {
   cy.session(email, () => {
     cy.visit("/auth/login");
