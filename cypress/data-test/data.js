@@ -9,11 +9,11 @@ const user = {
   phone: "685201867",
 };
 const userChange = {
-  email: "oleg1pichkur@gmail.com",
+  email: "11pichkur@gmail.com",
   password: "admfse01",
-  name: "Олег2",
-  surename: "Пічкур2",
-  secname: "Станіславович2",
+  name: "ОлегA",
+  surename: "ПічкурA",
+  secname: "СтаніславовичA",
   phone: "685201860",
 };
 
@@ -60,4 +60,4 @@ const setSuccessSignup = [
   },
 ];
 
-export { sizes, user, setSuccessSignup };
+export { sizes, user, setSuccessSignup, userChange };

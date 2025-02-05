@@ -93,14 +93,21 @@ describe("Mobile v. Module authentication ", () => {
     cy.get("@input-fields").eq(1).clear();
     cy.get("@input-fields").eq(2).clear();
     cy.get("@input-fields").eq(3).clear();
-    cy.get("@input-fields").eq(0).type("Surename");
-    cy.get("@input-fields").eq(1).type("Name ");
-    cy.get("@input-fields").eq(2).type(" Secname");
-    cy.get("@input-fields").eq(3).type("335620011");
-    cy.get("@input-fields").eq(0).should("have.value", "Surename".trim());
-    cy.get("@input-fields").eq(1).should("have.value", "Name ".trim());
-    cy.get("@input-fields").eq(2).should("have.value", " Secname".trim());
-    cy.get("@input-fields").eq(3).should("have.value", `+380335620011`);
+    cy.get("@input-fields").eq(4).clear();
+    cy.get("@input-fields").eq(0).type(userChange.surename);
+    cy.get("@input-fields").eq(1).type(userChange.name);
+    cy.get("@input-fields").eq(2).type(userChange.secname);
+    cy.get("@input-fields").eq(3).type(userChange.phone);
+    cy.get("@input-fields").eq(4).type(userChange.email);
+    cy.get("@input-fields")
+      .eq(0)
+      .should("have.value", userChange.surename.trim());
+    cy.get("@input-fields").eq(1).should("have.value", userChange.name.trim());
+    cy.get("@input-fields")
+      .eq(2)
+      .should("have.value", userChange.secname.trim());
+    cy.get("@input-fields").eq(3).should("have.value", `+380685201860`);
+    cy.get("@input-fields").eq(4).should("have.value", userChange.email);
     cy.intercept("PUT", "/user/profile/*").as("update");
     cy.get("button").contains("Зберегти").click();
     cy.wait("@update").its("response.statusCode").should("eq", 200);
@@ -113,14 +120,17 @@ describe("Mobile v. Module authentication ", () => {
     cy.get("@input-fields").eq(1).clear();
     cy.get("@input-fields").eq(2).clear();
     cy.get("@input-fields").eq(3).clear();
+    cy.get("@input-fields").eq(4).clear();
     cy.get("@input-fields").eq(0).type(user.surename);
     cy.get("@input-fields").eq(1).type(user.name);
     cy.get("@input-fields").eq(2).type(user.secname);
     cy.get("@input-fields").eq(3).type(user.phone);
+    cy.get("@input-fields").eq(4).type(user.email);
     cy.get("@input-fields").eq(0).should("have.value", user.surename.trim());
     cy.get("@input-fields").eq(1).should("have.value", user.name.trim());
     cy.get("@input-fields").eq(2).should("have.value", user.secname.trim());
     cy.get("@input-fields").eq(3).should("have.value", `+380${user.phone}`);
+    cy.get("@input-fields").eq(4).should("have.value", user.email.trim());
     cy.intercept("PUT", "/user/profile/*").as("update");
     cy.get("button").contains("Зберегти").click();
     cy.wait("@update").its("response.statusCode").should("eq", 200);
