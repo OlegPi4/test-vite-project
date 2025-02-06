@@ -6,7 +6,7 @@ export default defineConfig({
       // implement node event listeners here
     },
     pageLoadTimeout: 240000,
-    baseUrl: "https://teamchallenge-sport-store-frontend.vercel.app/",
-    //baseUrl: "http://localhost:3000",
+    // baseUrl: "https://teamchallenge-sport-store-frontend.vercel.app/",
+    baseUrl: "http://localhost:3000",
   },
 });

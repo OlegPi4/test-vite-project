@@ -10,6 +10,7 @@
 //
 //
 // -- This is a parent command --
+/// <reference types="cypress-xpath" />
 Cypress.Commands.add("loadMainPage", (path) => {
   cy.intercept("GET", path).as("main-page");
   cy.visit(path);
@@ -21,10 +22,25 @@ Cypress.Commands.add("loadLoginPage", () => {
   cy.get("header li").eq(1).click();
   cy.url().should("include", "/auth/login");
 });
+Cypress.Commands.add("loadLoginPageDesk", () => {
+  cy.xpath("//header[1]/div[1]/div[2]/div[1]/div[2]/ul[1]/li[2]").as(
+    "icon-user"
+  );
+  cy.get("@icon-user").click();
+  cy.get("h1").should("be.visible").contains("Авторизація");
+});
+
+
 
 Cypress.Commands.add("loginUser", (email, password) => {
-  cy.get('[name="email"]').type(email);
-  cy.get('[name="password"]').type(password);
+  cy.xpath('(//form[@action="#"])[2]')
+    .xpath("./div[1]/div[1]/div[1]/input")
+    .type(email);
+  //cy.get('form[2] input[name="email"]').should("be.visible").eq(0).type(email);
+  cy.get('form[2] input[name="password"]')
+    .should("be.visible")
+    .eq(0)
+    .type(password);
   cy.get('[name="email"]').should("have.value", email);
   cy.get('[name="password"]').should("have.value", password);
   cy.intercept("POST", "/user/login").as("login");
@@ -33,6 +49,17 @@ Cypress.Commands.add("loginUser", (email, password) => {
   cy.location("pathname").should("eq", "/auth/profile");
   cy.get("header li svg circle").eq(1).as("icon-user");
   cy.get("@icon-user").should("have.attr", "fill");
+});
+
+Cypress.Commands.add("loginUserDesk", (email, password) => {
+  cy.get('[name="email"]').type(email);
+  cy.get('[name="password"]').type(password);
+  cy.get('[name="email"]').should("have.value", email);
+  cy.get('[name="password"]').should("have.value", password);
+  cy.intercept("POST", "/user/login").as("login");
+  cy.get('[type="submit"]').click();
+  cy.wait("@login").its("response.statusCode").should("eq", 200);
+  cy.contains("Топ продажів");
 });
 
 Cypress.Commands.add("clearInputCheck", (selector, id, data) => {
