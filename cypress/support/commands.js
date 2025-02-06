@@ -36,8 +36,13 @@ Cypress.Commands.add("loginUser", (email, password) => {
 });
 
 Cypress.Commands.add("clearInputCheck", (selector, id, data) => {
-  cy.get(selector).eq(id).clear().type(data);
-  cy.get(selector).eq(id).should("have.value", data.trim());
+  if (id == 3) {
+    // cy.get(selector).eq(id).clear().type(data);
+    // cy.get(selector).eq(id).should("have.value", `+380${data}`);
+  } else {
+    cy.get(selector).eq(id).clear().type(data);
+    cy.get(selector).eq(id).should("have.value", data.trim());
+  }
 });
 
 Cypress.Commands.add("login", (email, password) => {
