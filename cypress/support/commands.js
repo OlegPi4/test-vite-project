@@ -30,17 +30,9 @@ Cypress.Commands.add("loadLoginPageDesk", () => {
   cy.get("h1").should("be.visible").contains("Авторизація");
 });
 
-
-
 Cypress.Commands.add("loginUser", (email, password) => {
-  cy.xpath('(//form[@action="#"])[2]')
-    .xpath("./div[1]/div[1]/div[1]/input")
-    .type(email);
-  //cy.get('form[2] input[name="email"]').should("be.visible").eq(0).type(email);
-  cy.get('form[2] input[name="password"]')
-    .should("be.visible")
-    .eq(0)
-    .type(password);
+  cy.get('[name="email"]').type(email);
+  cy.get('[name="password"]').type(password);
   cy.get('[name="email"]').should("have.value", email);
   cy.get('[name="password"]').should("have.value", password);
   cy.intercept("POST", "/user/login").as("login");
@@ -52,14 +44,21 @@ Cypress.Commands.add("loginUser", (email, password) => {
 });
 
 Cypress.Commands.add("loginUserDesk", (email, password) => {
-  cy.get('[name="email"]').type(email);
-  cy.get('[name="password"]').type(password);
-  cy.get('[name="email"]').should("have.value", email);
-  cy.get('[name="password"]').should("have.value", password);
+  cy.get('form[action="#"] input[name="email"]').eq(1).type(email);
+  cy.get('form[action="#"] input[name="password"]').eq(1).type(password);
+
+  cy.get('form[action="#"] input[name="email"]')
+    .eq(1)
+    .should("have.value", email);
+  cy.get('form[action="#"] input[name="password"]')
+    .eq(1)
+    .should("have.value", password);
   cy.intercept("POST", "/user/login").as("login");
-  cy.get('[type="submit"]').click();
+  cy.get('form[action="#"] button[type="submit"]').eq(1).click();
   cy.wait("@login").its("response.statusCode").should("eq", 200);
   cy.contains("Топ продажів");
+  cy.get("header li svg circle").as("icon-user");
+  cy.get("@icon-user").should("have.attr", "fill");
 });
 
 Cypress.Commands.add("clearInputCheck", (selector, id, data) => {
