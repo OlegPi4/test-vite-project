@@ -70,36 +70,29 @@ describe("Mobile v. Module authentication ", () => {
 
   it.only("TC01-R-004 Successful changing user’s profile data", () => {
     cy.loginUser(user.email, user.password);
-    cy.get("div input").as("input-fields");
+    cy.get("div input").should("exist").and("be.visible").as("input-fields");
     cy.get("@input-fields").should("have.length", 7);
     cy.clearInputCheck("@input-fields", 0, userChange.surename);
     cy.clearInputCheck("@input-fields", 1, userChange.name);
     cy.clearInputCheck("@input-fields", 2, userChange.secname);
-    cy.get("@input-fields").eq(3).clear();
-    cy.get("@input-fields").eq(4).clear();
-    cy.get("@input-fields").eq(3).type(userChange.phone);
-    cy.get("@input-fields").eq(4).type(userChange.email);
-    cy.get("@input-fields")
-      .eq(3)
-      .should("have.value", `+380${userChange.phone}`);
-    cy.get("@input-fields").eq(4).should("have.value", userChange.email);
+    cy.clearInputCheck("@input-fields", 3, userChange.phone);
+    cy.clearInputCheck("@input-fields", 4, userChange.email);
+
     cy.intercept("PUT", "/user/profile/*").as("update");
     cy.get("button").contains("Зберегти").click();
     cy.wait("@update").its("response.statusCode").should("eq", 200);
     cy.get("p").contains("Інформація успішно оновлена").should("be.visible");
-    cy.wait(6);
     cy.get("button").contains("Редагувати").click();
+    //Restoring original data
+    cy.log("Restoring original data");
     cy.get("div input").as("input-fields");
     cy.get("@input-fields").should("have.length", 7);
     cy.clearInputCheck("@input-fields", 0, user.surename);
-    cy.clearInputCheck("@input-fields", 1, user.surename);
-    cy.clearInputCheck("@input-fields", 2, user.surename);
-    cy.get("@input-fields").eq(3).clear();
-    cy.get("@input-fields").eq(4).clear();
-    cy.get("@input-fields").eq(3).type(user.phone);
-    cy.get("@input-fields").eq(4).type(user.email);
-    cy.get("@input-fields").eq(3).should("have.value", `+380${user.phone}`);
-    cy.get("@input-fields").eq(4).should("have.value", user.email.trim());
+    cy.clearInputCheck("@input-fields", 1, user.name);
+    cy.clearInputCheck("@input-fields", 2, user.secname);
+    cy.clearInputCheck("@input-fields", 3, user.phone);
+    cy.clearInputCheck("@input-fields", 4, user.email);
+
     cy.intercept("PUT", "/user/profile/*").as("update");
     cy.get("button").contains("Зберегти").click();
     cy.wait("@update").its("response.statusCode").should("eq", 200);

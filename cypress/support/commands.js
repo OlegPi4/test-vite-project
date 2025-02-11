@@ -11,6 +11,8 @@
 //
 // -- This is a parent command --
 /// <reference types="cypress-xpath" />
+import "cypress-file-upload";
+
 Cypress.Commands.add("loadMainPage", (path) => {
   cy.intercept("GET", path).as("main-page");
   cy.visit(path);
@@ -62,13 +64,17 @@ Cypress.Commands.add("loginUserDesk", (email, password) => {
 });
 
 Cypress.Commands.add("clearInputCheck", (selector, id, data) => {
-  if (id == 3) {
-    // cy.get(selector).eq(id).clear().type(data);
-    // cy.get(selector).eq(id).should("have.value", `+380${data}`);
-  } else {
-    cy.get(selector).eq(id).clear().type(data);
-    cy.get(selector).eq(id).should("have.value", data.trim());
-  }
+  cy.get(selector).eq(id).clear();
+
+  cy.get(selector).then(($input) => {
+    if (id == 3) {
+      cy.get(":nth-child(4) > .label").type(data);
+      cy.wrap($input).eq(id).should("have.value", `+380${data}`);
+    } else {
+      cy.get(selector).eq(id).type(data);
+      cy.get(selector).eq(id).should("have.value", data.trim());
+    }
+  });
 });
 
 Cypress.Commands.add("login", (email, password) => {
