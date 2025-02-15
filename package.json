@@ -25,6 +25,7 @@
     "cypress": "^14.0.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-iframe": "^1.0.1",
+    "cypress-mochawesome-reporter": "^3.8.2",
     "cypress-xpath": "^2.0.1",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.2",

@@ -87,6 +87,23 @@ Cypress.Commands.add("login", (email, password) => {
   });
 });
 //
+// Cypress.Commands.add("clickLink", (label) => {
+//   cy.get("a").contains(label).click();
+// });
+
+// Cypress.Commands.overwrite(
+//   "contains",
+//   (originalFn, subject, filter, text, options = {}) => {
+//     if (typeof text === "object") {
+//       options = text;
+//       text = filter;
+//       filter = undefined;
+//     }
+//     options.matchCase = false;
+//     return originalFn(subject, filter, text, options);
+//   }
+// );
+
 //
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
